@@ -1,5 +1,45 @@
 <?php
+include ('boostrap.php');
 
+$isLoggedIn = isset($_SESSION['user_id']);
+$userRole = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+
+if ($isLoggedIn && $userRole === 'admin') {
+
+} else {
+    header("Location: index.php");
+    exit();
+}
+
+$records_per_page = 5;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $records_per_page;
+
+$searchQuery = '';
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $searchQuery = $conn->real_escape_string($_GET['search']);
+    $sql = "SELECT comments.id, comments.text, comments.post_id, comments.date,comments.is_moderate, users.username AS author_name 
+            FROM comments 
+            JOIN users ON comments.id_author = users.id 
+            WHERE comments.text LIKE '%$searchQuery%' OR comments.post_id LIKE '%$searchQuery%' 
+            LIMIT $records_per_page OFFSET $offset";
+} else {
+    $sql = "SELECT comments.id, comments.text, comments.post_id, comments.date,comments.is_moderate, users.username AS author_name 
+            FROM comments 
+            JOIN users ON comments.id_author = users.id 
+            LIMIT $records_per_page OFFSET $offset";
+}
+
+$result = $conn->query($sql);
+
+$total_result_sql = "SELECT COUNT(*) AS total FROM comments";
+if (!empty($searchQuery)) {
+    $total_result_sql = "SELECT COUNT(*) AS total FROM comments WHERE text LIKE '%$searchQuery%' OR post_id LIKE '%$searchQuery%'";
+}
+$total_result = $conn->query($total_result_sql);
+$total_row = $total_result->fetch_assoc();
+$total_records = $total_row['total'];
+$total_pages = ceil($total_records / $records_per_page);
 ?>
 
 <title>Admin Panel Comments</title>

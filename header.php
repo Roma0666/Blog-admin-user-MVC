@@ -17,7 +17,7 @@ $userRole = isset($_SESSION['role']) ? $_SESSION['role'] : '';
                 echo '<div class="header-item"><li><a>' . $_SESSION['username'] . '</a></li></div>';
                 echo '<div class="header-item"><li><a href="logout.php">Logout</a></li></div>';
             } else {
-                echo '<div class="header-item"><li><a href="login">Login/Register</a></li></div>';
+                echo '<div class="header-item"><li><a href="login.php">Login/Register</a></li></div>';
             }
             ?>
         </ul>

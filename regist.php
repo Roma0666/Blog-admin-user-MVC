@@ -1,10 +1,18 @@
 <?php
-require_once('Controller/RegistController.php');
+include ("header.php");
+?>
+    <link rel="stylesheet" href="style.css">
+    <title>Create new account</title>
+    <div class="form">
+        <div class="text">Create account</div>
+        <form method="POST" action="create-account.php">
+            <input class="form-input" type="text" name="username" placeholder="user name" required><br>
+            <input class="form-input" name="email" type="email" placeholder="email" required><br>
+            <input class="form-input" name="pass" type="password" placeholder="password" required><br>
+            <button class="buttton" type="submit">create</button>
+        </form>
 
-$action = isset($_GET['action']) ? $_GET['action'] : 'createAccount';
-
-$controller = new RegistController();
-if ($action === 'createAccount') {
-    $controller->createAccount();
-}
+    </div>
+<?php
+include ("footer.php");
 ?>
